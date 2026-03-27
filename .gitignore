@@ -1,0 +1,13 @@
+# Java kompilierte Dateien
+*.class
+*.ctxt
+
+# BlueJ/Greenfoot spezifisch
+/doc/
+*.bluej
+
+# Editor-Einstellungen
+.vscode/
+
+# Große Archive
+*.jar
