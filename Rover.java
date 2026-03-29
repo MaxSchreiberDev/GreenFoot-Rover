@@ -11,10 +11,10 @@ public class Rover extends Actor
     /**CHATGPT**/
     /**Wird aber alles nicht benutzt haha**/
 
-    public class Punkt {
+    private class Punkt {
         public int X;
         public int Y;
-
+        
         public Punkt(int x, int y) {
             this.X = x;
             this.Y = y;
@@ -58,16 +58,42 @@ public class Rover extends Actor
     /**CHATGPT ENDE**/    
     
     public ArrayList<Punkt> getPointY(int Y){
-        ArrayList<Punkt> points = new ArrayList<>();
+        ArrayList<Punkt> x = new ArrayList<>();
         for (Punkt p : punkte) {
             if (p.Y == Y) {
-                points.add(new Punkt(p.X, p.Y));
+                x.add(new Punkt(p.X, p.Y));
             }        
         }
-        for (Punkt p : points) {
+        for (Punkt p : x) {
             System.out.println("("+p.X+"|"+p.Y+")");
         }
-        return points;
+        return x;
+    }
+
+    public Punkt getMinXPointFromList(ArrayList<Punkt> x){   
+        if (x == null || x.isEmpty()) {
+            return null;
+        }
+        Punkt lowestPoint = x.get(0);
+
+        for (Punkt p : x) {
+            if (p.X < lowestPoint.X) {
+                lowestPoint = p;
+            }
+        }
+    
+        return lowestPoint;
+    }
+    
+    public ArrayList<Punkt> pointsOnLayer = new ArrayList<>();
+    public boolean newLayer = false;
+    public int currentSearchLayer;
+    
+    public void next_point_on_layer(int y) {
+        if(newLayer){
+            pointsOnLayer = getPointY(currentSearchLayer);
+        }
+        
     }
     
     public void act() 
@@ -91,7 +117,7 @@ public class Rover extends Actor
     }    
     
     /**Rotiere den Rover nach Oben oder Unten, je nachdem ob der Punkt über oder unter ihm liegt**/
-    public void toPointRotateY(int y) {
+    private void toPointRotateY(int y) {
         System.out.println("toPointRotateY(" + y + ")");
         if (getY()>y){
             if(getRotation()!=270){
@@ -124,7 +150,7 @@ public class Rover extends Actor
         }
     }
     
-    public void toPointY(int x, int y)
+    private void toPointY(int x, int y)
     {
         System.out.println("toPointY(" + x + "," + y + ")");
         boolean driveY = true;
@@ -136,6 +162,7 @@ public class Rover extends Actor
                 while(rotation!=0){
                     if(kannFahren()) {
                     fahre();
+                    speicherePunkt(getX(), getY());
                     drehe("links");
                     rotation--;
                     } else {
@@ -145,6 +172,7 @@ public class Rover extends Actor
             }
             else if(kannFahren()) {
                 fahre();
+                speicherePunkt(getX(), getY());
             }
             if(y==getY()) {
                 driveY = false;
@@ -153,7 +181,7 @@ public class Rover extends Actor
     }
     
     /**Rotiere den Rover nach Links oder Rechts, je nachdem ob der Punkt links oder rechts von ihm liegt.**/
-    public void toPointRotateX(int x) {
+    private void toPointRotateX(int x) {
         System.out.println("toPointRotateX(" + x + ")");
         if (getX()>x){
             if(getRotation()!=180){
@@ -186,7 +214,7 @@ public class Rover extends Actor
         }
     }
     
-    public void toPointX(int x, int y)
+    private void toPointX(int x, int y)
     {
         System.out.println("toPointX(" + x + "," + y + ")");
         boolean left = true;
@@ -198,6 +226,7 @@ public class Rover extends Actor
                 while(rotation!=0){
                     if(kannFahren()) {
                     fahre();
+                    speicherePunkt(getX(), getY());
                     drehe("links");
                     rotation--;
                     } else {
@@ -221,24 +250,13 @@ public class Rover extends Actor
             }
             if(kannFahren()) {
                 fahre();
+                speicherePunkt(getX(), getY());
             }
             if(y==getY() && getX() == x){
                 left = false;
             }
         }
     }
-    
-    public void moveLayer(){ 
-        for (int getlayer = 0; getlayer < mapY; getlayer++) /**CHATGPT LINE**/{
-            int layer = mapY - getlayer;
-            ArrayList<Punkt> po = getPointY(layer);
-            if (!po.isEmpty()) {
-                
-            }
-        }
-    }
-    
-    
     
     /**CHATGPT**/
     /**
