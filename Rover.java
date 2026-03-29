@@ -9,74 +9,71 @@ public class Rover extends Actor
     public int mapX = 15;
     
     /**CHATGPT**/
-    /**Wird aber alles nicht benutzt haha**/
 
-    private class Punkt {
+    private class Point {
         public int X;
         public int Y;
         
-        public Punkt(int x, int y) {
+        public Point(int x, int y) {
             this.X = x;
             this.Y = y;
         }
     }
     
-    public ArrayList<Punkt> punkte = new ArrayList<>();
+    public ArrayList<Point> punkte = new ArrayList<>();
     
-    private boolean istPunktSchonVorhanden(int x, int y) {
-        for (Punkt p : punkte) {
-            if (p.X == x && p.Y == y) {
-                return true; // Treffer gefunden!
+    private boolean pointExist(int x, int y, ArrayList<Point> liste) {
+            for (Point p : liste) {
+                if (p.X == x && p.Y == y) {
+                    return true;
+                }
             }
+            return false; // Kein Treffer nach der gesamten Liste
         }
-        return false; // Kein Treffer nach der gesamten Liste
-    }
     
-    private void speicherePunkt(int x, int y) {
-        // 1. Prüfen, ob der Punkt schon existiert
-        if (!istPunktSchonVorhanden(x, y)) { 
-            // 2. Wenn NEIN (! bedeutet 'nicht'), dann erstelle ein neues Objekt und ab in die Liste
-            punkte.add(new Punkt(x, y));
+    private void pointSave(int x, int y, ArrayList<Point> list) {
+        if (!pointExist(x, y, list)) { 
+            list.add(new Point(x, y));
             System.out.println("Punkt (" + x + "|" + y + ") wurde gespeichert.");
         } else {
-            // 3. Wenn JA, passiert einfach nichts (oder eine Fehlermeldung)
             System.out.println("Punkt (" + x + "|" + y + ") ist schon bekannt!");
         }
     }
     
-    public void zeigeAllePunkte() {
+    public void pointShowAll(ArrayList<Point> x) {
         System.out.println("--- Besuchte Punkte ---");
         
-        for (Punkt p : punkte) {
+        for (Point p : x) {
             // Wir greifen auf die X und Y Variablen des Punkt-Objekts zu
             System.out.println("Punkt bei X: " + p.X + ", Y: " + p.Y);
         }
         
         System.out.println("Gesamtanzahl: " + punkte.size());
     }
-        
+       
     /**CHATGPT ENDE**/    
-    
-    public ArrayList<Punkt> getPointY(int Y){
-        ArrayList<Punkt> x = new ArrayList<>();
-        for (Punkt p : punkte) {
+
+    /**/
+    public ArrayList<Point> getPointY(int Y){
+        ArrayList<Point> x = new ArrayList<>();
+        for (Point p : punkte) {
             if (p.Y == Y) {
-                x.add(new Punkt(p.X, p.Y));
+                x.add(new Point(p.X, p.Y));
             }        
         }
-        for (Punkt p : x) {
+        for (Point p : x) {
             System.out.println("("+p.X+"|"+p.Y+")");
         }
         return x;
     }
 
-    public Punkt getMinXPointFromList(ArrayList<Punkt> x){   
+    public Point getMinXPointFromList(ArrayList<Point> x){   
         if (x == null || x.isEmpty()) {
             return null;
         }
-        Punkt lowestPoint = x.get(0);
+        Point lowestPoint = x.get(0);
 
-        for (Punkt p : x) {
+        for (Point p : x) {
             if (p.X < lowestPoint.X) {
                 lowestPoint = p;
             }
@@ -85,7 +82,7 @@ public class Rover extends Actor
         return lowestPoint;
     }
     
-    public ArrayList<Punkt> pointsOnLayer = new ArrayList<>();
+    public ArrayList<Point> pointsOnLayer = new ArrayList<>();
     public boolean newLayer = false;
     public int currentSearchLayer;
     
@@ -110,9 +107,9 @@ public class Rover extends Actor
         System.out.println("--- Move to Point ---");
         System.out.println("Point: (" + x + "|" + y + ")");
         toPointRotateY(y);
-        toPointY(x, y);
+        toPointY(x, y, punkte);
         toPointRotateX(x);
-        toPointX(x, y);
+        toPointX(x, y, punkte);
         System.out.println("--- Reached point! ---");
     }    
     
@@ -150,7 +147,7 @@ public class Rover extends Actor
         }
     }
     
-    private void toPointY(int x, int y)
+    private void toPointY(int x, int y, ArrayList<Point> list)
     {
         System.out.println("toPointY(" + x + "," + y + ")");
         boolean driveY = true;
@@ -162,7 +159,7 @@ public class Rover extends Actor
                 while(rotation!=0){
                     if(kannFahren()) {
                     fahre();
-                    speicherePunkt(getX(), getY());
+                    pointSave(getX(), getY(), list);
                     drehe("links");
                     rotation--;
                     } else {
@@ -172,7 +169,7 @@ public class Rover extends Actor
             }
             else if(kannFahren()) {
                 fahre();
-                speicherePunkt(getX(), getY());
+                pointSave(getX(), getY(), list);
             }
             if(y==getY()) {
                 driveY = false;
@@ -214,7 +211,7 @@ public class Rover extends Actor
         }
     }
     
-    private void toPointX(int x, int y)
+    private void toPointX(int x, int y, ArrayList<Point> list)
     {
         System.out.println("toPointX(" + x + "," + y + ")");
         boolean left = true;
@@ -226,7 +223,7 @@ public class Rover extends Actor
                 while(rotation!=0){
                     if(kannFahren()) {
                     fahre();
-                    speicherePunkt(getX(), getY());
+                    pointSave(getX(), getY(), list);
                     drehe("links");
                     rotation--;
                     } else {
@@ -250,7 +247,7 @@ public class Rover extends Actor
             }
             if(kannFahren()) {
                 fahre();
-                speicherePunkt(getX(), getY());
+                pointSave(getX(), getY(), list);
             }
             if(y==getY() && getX() == x){
                 left = false;
