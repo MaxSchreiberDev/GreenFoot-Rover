@@ -15,11 +15,19 @@ public class Planet extends World
     public Planet()
     {
         super(16, 12, zellenGroesse);
-         setBackground("images/boden.png");
+        setBackground("images/boden.png");
         setPaintOrder(String.class, Rover.class, Marke.class, Gestein.class, Huegel.class);
         Greenfoot.setSpeed(20); 
+        prepare();
     }
 
-  
     
+    /**
+     * Prepare the world for the start of the program.
+     * That is: create the initial objects and add them to the world.
+     */
+    private void prepare()
+    {
+        
+    }
 }
