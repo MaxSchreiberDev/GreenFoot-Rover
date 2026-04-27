@@ -384,7 +384,46 @@ public class Rover extends Actor
             System.out.println("Befehl nicht korrekt!");
         }
     }
-
+    
+    public void square(int X, int Y)
+    {
+        boolean dir = true;
+        int cY = Y;
+        int c = 0;
+        while (cY > 0)
+        {
+            c += 1; 
+            int cX = X-1;
+            if (c % 2 == 0){
+                dir = false;
+            }
+            else {
+                dir = true;
+            }
+            System.out.println(dir);
+            while (cX > 0){
+                fahre();
+                cX -= 1;
+            }
+            if (cY > 1){
+                if (dir){
+                    drehe("links");
+                }
+                else {
+                    drehe("rechts");
+                }
+                fahre();
+                if (dir){
+                    drehe("links");
+                }
+                else {
+                    drehe("rechts");
+                }
+            }
+        cY -= 1;
+        }
+    }
+    
     /**
      * Der Rover gibt durch einen Wahrheitswert (true oder false )zur�ck, ob sich auf seiner Position ein Objekt der Klasse Gestein befindet.
      * Eine entsprechende Meldung erscheint auch auf dem Display.
