@@ -95,6 +95,22 @@ public class Rover extends Actor
     
     public void act() 
     {
+        int c = 0;
+        while (!markeVorhanden()){
+            if (gesteinVorhanden()){
+                analysiereGestein();
+            }
+            else {
+                fahre();
+                c+=1;
+            }
+        }
+        drehe("links");
+        drehe("links");
+        while (c>=0){
+            fahre();
+            c-=1;
+        }
     } 
 
     public void toLeftGround()
